@@ -3,7 +3,7 @@ from celery import Celery
 from django.conf import settings
 
 # TODO: change this in production
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_template.settings.production")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_template.settings.local")
 
 app = Celery("django_template")
 

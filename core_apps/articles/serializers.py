@@ -29,6 +29,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     views = serializers.SerializerMethodField()
     created_at = serializers.SerializerMethodField()
     updated_at = serializers.SerializerMethodField()
+    average_rating = serializers.ReadOnlyField()
 
     def get_views(self, obj):
         return ArticleView.objects.filter(article=obj).count()
@@ -45,6 +46,9 @@ class ArticleSerializer(serializers.ModelSerializer):
         then = obj.updated_at
         formatted_date = then.strftime("%m/%d/%Y, %H:%M:%S")
         return formatted_date
+
+    def get_average_rating(self, obj):
+        return obj.average_rating()
 
     #tags are read only, so custom create/update are needed
     def create(self, validated_data):
@@ -80,6 +84,7 @@ class ArticleSerializer(serializers.ModelSerializer):
             "description",
             "body",
             "banner_image",
+            "average_rating",
             "created_at",
             "updated_at",
         ]

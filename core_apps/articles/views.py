@@ -11,6 +11,8 @@ from .filters import ArticleFilter
 from .pagination import ArticlePagination
 from .renderers import ArticleJSONRenderer, ArticlesJSONRenderer
 from .permissions import IsOwnerOrReadOnly
+from django.core.files.storage import default_storage
+from rest_framework.parsers import MultiPartParser, FormParser
 
 User = get_user_model()
 
@@ -38,9 +40,15 @@ class ArticleRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
     lookup_field = "id"
     renderer_classes = [ArticleJSONRenderer]
+    parser_classes = [MultiPartParser, FormParser]
 
     def perform_update(self, serializer):
         instance = serializer.save(author=self.request.user)
+        if "banner_image" in self.request.FILES:
+            if (instance.banner_image and instance.banner_image.name != "/profile_default.png"):
+                default_storage.delete(instance.banner_image.path)
+            instance.banner_image = self.request.FILES["banner_image"]
+            instance.save()
 
     def retrieve(self, request, *args, **kwargs):
         try:

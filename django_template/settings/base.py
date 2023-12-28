@@ -52,6 +52,7 @@ THIRD_PARTY_APPS = [
     "dj_rest_auth",
     "dj_rest_auth.registration",
     "taggit",
+    "drf_spectacular",
 ]
 
 LOCAL_APPS = [
@@ -60,6 +61,7 @@ LOCAL_APPS = [
     "core_apps.profiles",
     "core_apps.articles",
     "core_apps.ratings",
+    "core_apps.bookmarks",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -75,6 +77,7 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 

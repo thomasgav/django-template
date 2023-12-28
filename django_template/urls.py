@@ -6,6 +6,10 @@ from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 from dj_rest_auth.views import PasswordResetConfirmView
 from core_apps.users.views import CustomUserDetailsView
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularSwaggerView,
+)
 
 
 schema_view = get_schema_view(
@@ -22,6 +26,8 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0)),
+    path('api/v1/schema/', SpectacularAPIView.as_view(), name='api-schema'),
+    path('api/v1/docs/', SpectacularSwaggerView.as_view(url_name='api-schema'), name='api-docs'),
     path(settings.ADMIN_URL, admin.site.urls),
     path("api/v1/auth/user/", CustomUserDetailsView.as_view(), name="user_details"),
     path("api/v1/auth/", include("dj_rest_auth.urls")),
@@ -34,6 +40,7 @@ urlpatterns = [
     path("api/v1/profiles/", include("core_apps.profiles.urls")),
     path("api/v1/articles/", include("core_apps.articles.urls")),
     path("api/v1/ratings/", include("core_apps.ratings.urls")),
+    path("api/v1/bookmarks/", include("core_apps.bookmarks.urls")),
 ]
 
 admin.site.site_header = "Tempalte API Admin"
